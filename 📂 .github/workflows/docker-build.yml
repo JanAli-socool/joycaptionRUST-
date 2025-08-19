@@ -20,5 +20,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
+          context: .                # build context (where Dockerfile is)
+          file: ./Dockerfile        # path to Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/joycaption-candle:gpu
