@@ -11,21 +11,25 @@ codegen-units = 1
 [dependencies]
 anyhow = "1"
 clap = { version = "4", features = ["derive"] }
-image = "0.24"
+image = "0.25"                       # bump to avoid old deps
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokenizers = "0.15"
 hf-hub = "0.3"
 
-# Candle crates (GPU enabled via features down in [features])
+# Candle crates, all aligned
 candle-core = { version = "0.9", default-features = false, features = ["cuda"] }
 candle-nn   = { version = "0.9", default-features = false, features = ["cuda"] }
 candle-transformers = { version = "0.9", default-features = false, features = ["cuda"] }
 
 [features]
-# Let `--features cpu` build a CPU-only binary if you ever need it
 cpu = [
   "candle-core/cpu",
   "candle-nn/cpu",
   "candle-transformers/cpu"
 ]
+
+[patch.crates-io]
+# force a single version for common deps if needed
+bytemuck = { version = "1.15" }
+num-traits = { version = "0.2.19" }
