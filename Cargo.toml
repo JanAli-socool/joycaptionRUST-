@@ -10,6 +10,7 @@ codegen-units = 1
 
 [dependencies]
 anyhow = "1"
+bytemuck = { version = "1.23.2", features = ["derive"] }
 clap = { version = "4", features = ["derive"] }
 image = "0.25"                       # bump to avoid old deps
 serde = { version = "1", features = ["derive"] }
@@ -31,5 +32,5 @@ cpu = [
 
 [patch.crates-io]
 # force a single version for common deps if needed
-bytemuck = { version = "=1.23.2" }
+bytemuck = "1.23.2"
 num-traits = { version = "0.2.19" }
