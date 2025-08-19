@@ -1,0 +1,31 @@
+[package]
+name = "joycaption-candle"
+version = "0.1.0"
+edition = "2021"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+image = "0.24"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokenizers = "0.15"
+hf-hub = "0.3"
+
+# Candle crates (GPU enabled via features down in [features])
+candle-core = { version = "0.9", default-features = false, features = ["cuda"] }
+candle-nn   = { version = "0.9", default-features = false, features = ["cuda"] }
+candle-transformers = { version = "0.9", default-features = false, features = ["cuda"] }
+
+[features]
+# Let `--features cpu` build a CPU-only binary if you ever need it
+cpu = [
+  "candle-core/cpu",
+  "candle-nn/cpu",
+  "candle-transformers/cpu"
+]
