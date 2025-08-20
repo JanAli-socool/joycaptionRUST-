@@ -18,6 +18,10 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
 WORKDIR /app
 COPY Cargo.toml Cargo.lock* ./
 COPY src ./src
+
+# Copy file from repo root into container
+COPY caption-image.jpg /app/caption-image.png
+
 RUN mkdir -p /outputs /workspace/hf-cache
 
 # Pre-fetch deps (faster subsequent builds)
@@ -37,5 +41,6 @@ RUN chmod +x /start.sh
 
 # Default CMD uses env vars to run a single caption and exit
 CMD ["/start.sh"]
+
 
 
