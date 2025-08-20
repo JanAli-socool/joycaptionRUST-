@@ -27,6 +27,8 @@ RUN mkdir -p /outputs /workspace/hf-cache
 # Pre-fetch deps (faster subsequent builds)
 RUN cargo fetch
 
+ENV HF_HUB_TOKEN=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
+
 # Skip nvcc requirement, only use runtime kernels
 ENV CUDARC_DISABLE_NVCC=1
 
@@ -41,6 +43,7 @@ RUN chmod +x /start.sh
 
 # Default CMD uses env vars to run a single caption and exit
 CMD ["/start.sh"]
+
 
 
 
