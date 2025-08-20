@@ -1,5 +1,5 @@
 # CUDA runtime base (fits RunPod GPUs)
-FROM nvidia/cuda:12.1.1-cudnn8-runtime-ubuntu22.04
+FROM nvidia/cuda:12.1.1-cudnn8-devel-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
     RUSTUP_HOME=/opt/rustup \
@@ -33,3 +33,4 @@ RUN chmod +x /start.sh
 # Default CMD uses env vars to run a single caption and exit
 # (RunPod will show the container logs; no SSH required)
 CMD ["/start.sh"]
+
