@@ -23,6 +23,9 @@ RUN mkdir -p /outputs /workspace/hf-cache
 # Pre-fetch deps (faster subsequent builds)
 RUN cargo fetch
 
+# Skip nvcc requirement, only use runtime kernels
+ENV CUDARC_DISABLE_NVCC=1
+
 # Build GPU binary (disable nvidia-smi check at build time)
 # Force skip nvidia-smi + set compute capability (Ada Lovelace = 8.9 for RTX 5090)
 ENV CUDA_COMPUTE_CAP=89
@@ -34,4 +37,5 @@ RUN chmod +x /start.sh
 
 # Default CMD uses env vars to run a single caption and exit
 CMD ["/start.sh"]
+
 
