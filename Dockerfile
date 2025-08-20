@@ -24,7 +24,9 @@ RUN mkdir -p /outputs /workspace/hf-cache
 RUN cargo fetch
 
 # Build GPU binary (disable nvidia-smi check at build time)
-RUN CANDLE_CUDA_DISABLE_NVSMI=1 cargo build --release
+# Force skip nvidia-smi + set compute capability (Ada Lovelace = 8.9 for RTX 5090)
+ENV CUDA_COMPUTE_CAP=89
+RUN CANDLE_CUDA_DISABLE_NVSMI=1 CUDA_COMPUTE_CAP=$CUDA_COMPUTE_CAP cargo build --release
 
 # Start script
 COPY start.sh /start.sh
@@ -32,3 +34,4 @@ RUN chmod +x /start.sh
 
 # Default CMD uses env vars to run a single caption and exit
 CMD ["/start.sh"]
+
