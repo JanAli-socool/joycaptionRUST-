@@ -68,7 +68,7 @@ fn main() -> Result<()> {
     // let api = Api::new()?;
     // let api = Api::new()?.with_token(std::env::var("HF_HUB_TOKEN")?)?;
     let hf_token = std::env::var("HF_HUB_TOKEN")?;
-    let api = hf_hub::sync::Api::new().with_auth_token(hf_token);
+    let api = Api::new().with_auth_token(hf_token);
     let repo = api.model(args.model_id.clone());
 
     let config_path = repo.get("config.json")?;
