@@ -23,14 +23,12 @@ RUN mkdir -p /outputs /workspace/hf-cache
 # Pre-fetch deps (faster subsequent builds)
 RUN cargo fetch
 
-# Build GPU binary (Candle cuda features enabled in Cargo.toml)
-RUN cargo build --release
+# Build GPU binary (disable nvidia-smi check at build time)
+RUN CANDLE_CUDA_DISABLE_NVSMI=1 cargo build --release
 
 # Start script
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
 # Default CMD uses env vars to run a single caption and exit
-# (RunPod will show the container logs; no SSH required)
 CMD ["/start.sh"]
-
