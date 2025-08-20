@@ -70,7 +70,7 @@ fn main() -> Result<()> {
     // let hf_token = std::env::var("HF_HUB_TOKEN")?;
     // let api = Api::new()?;
     // let api = Api::new().with_auth_token(hf_token);
-    let api = Api::new()?.with_auth_token(std::env::var("HF_HUB_TOKEN")?);
+    let api = Api::new().unwrap();
     let repo = api.model(args.model_id.clone());
 
     let config_path = repo.get("config.json")?;
