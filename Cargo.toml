@@ -30,7 +30,6 @@ cpu = [
   "candle-transformers/cpu"
 ]
 
-[patch.crates-io]
 # force a single version for common deps if needed
 bytemuck = "1.23.2"
 num-traits = { version = "0.2.19" }
