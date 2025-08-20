@@ -274,7 +274,7 @@ fn preprocess_joycaption_image(path: &str, size: u32, device: &Device) -> Result
     }
 
     let tensor = Tensor::from_vec(chw, (1, 3, size as usize, size as usize), device)?;
-    Ok((tensor, (w, h)));
+    Ok((tensor, (w, h)))
 }
 
 fn tokenizer_image_token(
@@ -326,6 +326,6 @@ fn tokenizer_image_token(
 fn decode_tokens(tokenizer: &Tokenizer, ids: &[u32]) -> Result<String> {
     // tokenizer.decode expects &[u32]
     // let s = tokenizer.decode(ids.to_vec(), true).map_err(|e| anyhow!("{e}"))?;
-    let s = tokenizer.decode(ids.as_slice(), true).map_err(|e| anyhow!("{e}"))?;
+    let s = tokenizer.decode(ids, true).map_err(|e| anyhow!("{e}"))?;
     Ok(s.trim().to_string())
 }
