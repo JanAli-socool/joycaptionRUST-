@@ -216,19 +216,11 @@ fn preprocess_joycaption_image(path: &str, size: u32, device: &Device) -> Result
     }
 
     // HWC -> CHW
+    // HWC -> CHW
     let hw = (size * size) as usize;
-    // let (r, g, b) = (&data_f32[0..hw], &data_f32[hw..2*hw], &data_f32[2*hw..3*hw]); // actually we pushed interleaved; so reorder properly
-    let (r, g, _b): (&[f32], &[f32], &[f32]) = (
-    &data_f32[0..hw],
-    &data_f32[hw..2*hw],
-    &data_f32[2*hw..3*hw],
-    );
-
-    let mut chw = Vec::with_capacity(data_f32.len());
-    // Rebuild correctly: iterate pixels and push channels per channel
-    chw.clear();
-    // We'll rebuild from the interleaved buffer
     let inter = data_f32;
+    
+    // Split into channels properly
     let mut rch = Vec::with_capacity(hw);
     let mut gch = Vec::with_capacity(hw);
     let mut bch = Vec::with_capacity(hw);
@@ -237,9 +229,44 @@ fn preprocess_joycaption_image(path: &str, size: u32, device: &Device) -> Result
         gch.push(inter[i + 1]);
         bch.push(inter[i + 2]);
     }
+    
+    // Combine as CHW
+    let mut chw = Vec::with_capacity(inter.len());
     chw.extend(rch);
     chw.extend(gch);
     chw.extend(bch);
+    
+    // Normalize [-1,1]
+    for v in chw.iter_mut() {
+        *v = (*v - 0.5) / 0.5;
+    }
+    
+    let tensor = Tensor::from_vec(chw, (1, 3, size as usize, size as usize), device)?;
+    Ok((tensor, (w, h)))
+    // let hw = (size * size) as usize;
+    // // let (r, g, b) = (&data_f32[0..hw], &data_f32[hw..2*hw], &data_f32[2*hw..3*hw]); // actually we pushed interleaved; so reorder properly
+    // let (r, g, _b): (&[f32], &[f32], &[f32]) = (
+    // &data_f32[0..hw],
+    // &data_f32[hw..2*hw],
+    // &data_f32[2*hw..3*hw],
+    // );
+
+    // let mut chw = Vec::with_capacity(data_f32.len());
+    // // Rebuild correctly: iterate pixels and push channels per channel
+    // chw.clear();
+    // // We'll rebuild from the interleaved buffer
+    // let inter = data_f32;
+    // let mut rch = Vec::with_capacity(hw);
+    // let mut gch = Vec::with_capacity(hw);
+    // let mut bch = Vec::with_capacity(hw);
+    // for i in (0..inter.len()).step_by(3) {
+    //     rch.push(inter[i]);
+    //     gch.push(inter[i + 1]);
+    //     bch.push(inter[i + 2]);
+    // }
+    // chw.extend(rch);
+    // chw.extend(gch);
+    // chw.extend(bch);
 
     // Normalize to [-1,1]
     for v in chw.iter_mut() {
@@ -297,7 +324,7 @@ fn tokenizer_image_token(
 }
 
 fn decode_tokens(tokenizer: &Tokenizer, ids: &[u32]) -> Result<String> {
-    let ids_i64: Vec<i64> = ids.iter().map(|&x| x as i64).collect();
-    let s = tokenizer.decode(ids_i64, true).map_err(|e| anyhow!("{e}"))?;
+    // tokenizer.decode expects &[u32]
+    let s = tokenizer.decode(ids.to_vec(), true).map_err(|e| anyhow!("{e}"))?;
     Ok(s.trim().to_string())
 }
