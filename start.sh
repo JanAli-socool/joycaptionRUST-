@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Env (set these in RunPod "Container Environment Variables")
 MODEL_ID="${MODEL_ID:-fancyfeast/llama-joycaption-beta-one-hf-llava}"
-IMAGE_PATH="${IMAGE_PATH:-/app/example.jpg}"
+IMAGE_PATH="${IMAGE_PATH:-/app/caption-image.png}"
 PROMPT="${PROMPT:-Describe the image in detail.}"
 MAX_NEW_TOKENS="${MAX_NEW_TOKENS:-128}"
 TEMPERATURE="${TEMPERATURE:-0.6}"
