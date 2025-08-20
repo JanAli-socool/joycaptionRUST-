@@ -217,7 +217,13 @@ fn preprocess_joycaption_image(path: &str, size: u32, device: &Device) -> Result
 
     // HWC -> CHW
     let hw = (size * size) as usize;
-    let (r, g, b) = (&data_f32[0..hw], &data_f32[hw..2*hw], &data_f32[2*hw..3*hw]); // actually we pushed interleaved; so reorder properly
+    // let (r, g, b) = (&data_f32[0..hw], &data_f32[hw..2*hw], &data_f32[2*hw..3*hw]); // actually we pushed interleaved; so reorder properly
+    let (r, g, _b): (&[f32], &[f32], &[f32]) = (
+    &data_f32[0..hw],
+    &data_f32[hw..2*hw],
+    &data_f32[2*hw..3*hw],
+    );
+
     let mut chw = Vec::with_capacity(data_f32.len());
     // Rebuild correctly: iterate pixels and push channels per channel
     chw.clear();
