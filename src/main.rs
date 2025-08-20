@@ -63,7 +63,9 @@ fn main() -> Result<()> {
     };
 
     // ---------- HF Hub fetch ----------
-    let api = Api::new()?;
+    let hf_token = std::env::var("HF_HUB_TOKEN")?;
+    let api = Api::new().with_token(hf_token)?;
+    // let api = Api::new()?;
     let repo = api.model(args.model_id.clone());
 
     let config_path = repo.get("config.json")?;
