@@ -15,6 +15,7 @@
 -   You should see a prompt like:
 
 `root@<container_id>:/workspace#`
+<img width="2489" height="990" alt="image" src="https://github.com/user-attachments/assets/bce963a3-b500-4717-8b1f-395991932caa" />
 
 * * * * *
 
