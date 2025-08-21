@@ -5,9 +5,12 @@
 
 -   Use the RunPod web terminal to start the container using your image, my actual docker image --> `devtester01/joycaption-candle:gpu`.
 -   Ensure the container is running with GPU enabled.
--   IP for RDP connecting with the loaded runpod is shown in image and its user/pwd is (tester / tester123A_1)
+-   IP for RDP connecting with the loaded runpod is shown in image and its user/pwd is (tester / tester123A@_1)
+-   start the instance and choose GPU
 
   <img width="537" height="293" alt="image" src="https://github.com/user-attachments/assets/e779adeb-0b12-4901-91b7-3dc41d354af8" />
+  <img width="2489" height="653" alt="image" src="https://github.com/user-attachments/assets/c0d54caa-0a13-4d06-a1da-932990604623" />
+
 
 
 * * * * *
