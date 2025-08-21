@@ -97,7 +97,7 @@ for live logs :
 
 `cat /workspace/joycaption_rust_output.log`
 
--   Compare against expected Python outputs (already shared in Discord).
+-   Compare against expected Python outputs (visible in the colab link in same VM tab1 of edge browser).
 
 * * * * *
 
