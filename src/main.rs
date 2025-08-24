@@ -52,25 +52,27 @@ fn main() -> Result<()> {
     let args = Args::parse();
 
     // ---------- device ----------
-    // Prefer CUDA 0, fallback to CPU silently
+    // Use CPU for local execution
     let device = if args.cpu {
         Device::Cpu
     } else {
-        match candle_core::Device::new_cuda(0) {
-            Ok(d) => d,
-            Err(_) => Device::Cpu,
-        }
+        // For local execution, default to CPU
+        println!("Note: Using CPU device for local execution");
+        Device::Cpu
     };
 
     // ---------- HF Hub fetch ----------
-    // let hf_token = std::env::var("HF_HUB_TOKEN")?;
-    // let api = Api::new().with_token(hf_token)?;
-    // let api = Api::new()?;
-    // let api = Api::new()?.with_token(std::env::var("HF_HUB_TOKEN")?)?;
-    // let hf_token = std::env::var("HF_HUB_TOKEN")?;
-    // let api = Api::new()?;
-    // let api = Api::new().with_auth_token(hf_token);
-    let api = Api::new().unwrap();
+    // For local execution, try to use HF token if available, otherwise anonymous
+    let api = match std::env::var("HF_HUB_TOKEN") {
+        Ok(token) if !token.is_empty() => {
+            println!("Using HuggingFace token for authentication");
+            Api::new()?.with_token(Some(token))
+        }
+        _ => {
+            println!("No HF token found, using anonymous access");
+            Api::new()?
+        }
+    };
     let repo = api.model(args.model_id.clone());
 
     let config_path = repo.get("config.json")?;

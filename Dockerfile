@@ -1,14 +1,13 @@
-# CUDA runtime base (fits RunPod GPUs)
-FROM nvidia/cuda:12.1.1-cudnn8-devel-ubuntu22.04
+# CPU-only base image for local development
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
     RUSTUP_HOME=/opt/rustup \
     CARGO_HOME=/opt/cargo \
-    PATH=/opt/cargo/bin:$PATH \
-    HF_HOME=/workspace/hf-cache
+    PATH=/opt/cargo/bin:$PATH
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates curl wget git build-essential pkg-config libssl-dev clang \
+    ca-certificates curl wget git build-essential pkg-config libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Rust
@@ -22,20 +21,13 @@ COPY src ./src
 # Copy file from repo root into container
 COPY caption-image.png /app/caption-image.png
 
-RUN mkdir -p /outputs /workspace/hf-cache
+RUN mkdir -p /outputs
 
 # Pre-fetch deps (faster subsequent builds)
 RUN cargo fetch
 
-ENV HF_HUB_TOKEN=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
-
-# Skip nvcc requirement, only use runtime kernels
-ENV CUDARC_DISABLE_NVCC=1
-
-# Build GPU binary (disable nvidia-smi check at build time)
-# Force skip nvidia-smi + set compute capability (Ada Lovelace = 8.9 for RTX 5090)
-ENV CUDA_COMPUTE_CAP=89
-RUN CANDLE_CUDA_DISABLE_NVSMI=1 CUDA_COMPUTE_CAP=$CUDA_COMPUTE_CAP cargo build --release
+# Build CPU binary
+RUN cargo build --release
 
 # Start script
 COPY start.sh /start.sh

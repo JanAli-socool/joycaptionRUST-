@@ -20,8 +20,8 @@ hf-hub = "0.4.3"
 num-traits = "0.2.19"
 
 # Candle crates, all aligned
-candle-core = { version = "0.9", default-features = false, features = ["cuda"] }
-candle-nn   = { version = "0.9", default-features = false, features = ["cuda"] }
-candle-transformers = { version = "0.9", default-features = false, features = ["cuda"] }
+candle-core = { version = "0.9", default-features = false }
+candle-nn   = { version = "0.9", default-features = false }
+candle-transformers = { version = "0.9", default-features = false }
 
 [features]
